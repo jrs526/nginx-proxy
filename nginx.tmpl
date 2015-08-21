@@ -50,7 +50,7 @@ proxy_set_header X-Forwarded-Proto $proxy_x_forwarded_proto;
 
 server {
 	listen 80;
-{{ range $service, $containers := groupByMulti $ "Env.SERVICE_NAME" "," }}
+{{ range $service, $containers := groupByMulti $ "Env.LOCATION" "," }}
   location /{{ $service }}/ {
     rewrite ^/{{ $service }}/(.*) /$1 break;
     proxy_pass http://{{ $service }};
@@ -58,7 +58,7 @@ server {
 {{ end }}
 }
 
-{{ range $service, $containers := groupByMulti $ "Env.SERVICE_NAME" "," }}
+{{ range $service, $containers := groupByMulti $ "Env.LOCATION" "," }}
 
 upstream {{ $service }} {
 {{ range $container := $containers }}
