@@ -94,9 +94,9 @@ server {
 	listen 80;
 {{ range $service, $containers := groupByMulti $ "Env.LOCATION" "," }}
   location /{{ $service }}/ {
-    rewrite ^/{{ $service }}/(.*) /$1 break;
+    proxy_pass http://{{ $service }}/;
+    proxy_redirect http://{{ $service }}/{{ $service }}/ http://$host/{{ $service }}/;
     proxy_set_header SCRIPT_NAME /{{ $service }};
-    proxy_pass http://{{ $service }};
   }
 {{ end }}
 }
